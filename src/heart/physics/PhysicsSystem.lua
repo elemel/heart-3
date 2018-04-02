@@ -8,8 +8,6 @@ local RectangleFixtureManager =
   require("heart.physics.RectangleFixtureManager")
 
 local RevoluteJointManager = require("heart.physics.RevoluteJointManager")
-local RigLoader = require("heart.physics.RigLoader")
-local RigManager = require("heart.physics.RigManager")
 local Topic = require("heart.game.Topic")
 
 local PhysicsSystem = {}
@@ -62,7 +60,6 @@ function PhysicsSystem:init(game, config)
     collision = Topic.new(),
   }
 
-  self.rigLoader = RigLoader.new()
   self.game.componentManagers.body = BodyManager.new(self)
   self.game.componentManagers.circleFixture = CircleFixtureManager.new(self)
   self.game.componentManagers.motorJoint = MotorJointManager.new(self)
@@ -72,7 +69,6 @@ function PhysicsSystem:init(game, config)
     RectangleFixtureManager.new(self)
 
   self.game.componentManagers.revoluteJoint = RevoluteJointManager.new(self)
-  self.game.componentManagers.rig = RigManager.new(self)
 end
 
 function PhysicsSystem:updatePhysics(dt)

@@ -11,6 +11,5 @@ physics.RectangleFixtureManager =
     require("heart.physics.RectangleFixtureManager")
 
 physics.RevoluteJointManager = require("heart.physics.RevoluteJointManager")
-physics.RigManager = require("heart.physics.RigManager")
 
 return physics
