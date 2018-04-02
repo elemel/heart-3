@@ -1,6 +1,4 @@
 local mathUtils = require("heart.math.utils")
-local SkeletonLoader = require("heart.transform.SkeletonLoader")
-local SkeletonManager = require("heart.transform.SkeletonManager")
 local TransformManager = require("heart.transform.TransformManager")
 local utils = require("heart.utils")
 
@@ -32,8 +30,6 @@ function TransformSystem:init(game)
   self.dirty = {}
   self.parents = {}
   self.children = {}
-  self.skeletonLoader = SkeletonLoader.new()
-  self.game.componentManagers.skeleton = SkeletonManager.new(self)
   self.game.componentManagers.transform = TransformManager.new(self)
   self.fixedUpdateSystem = assert(self.game.systems.fixedUpdate)
   self.fixedUpdateSystem.topics.physics:subscribe(self, self.fixedUpdate)
