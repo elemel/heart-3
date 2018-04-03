@@ -13,7 +13,7 @@ function TransformDebugSystem:init(game, config)
   self.graphicsSystem = assert(self.game.systems.graphics)
   self.graphicsSystem.topics.debug:subscribe(self, self.draw)
   self.transformSystem = assert(self.game.systems.transform)
-  self.color = config.color or {0x00, 0xff, 0x00, 0xff}
+  self.color = config.color or {0, 1, 0, 1}
 end
 
 function TransformDebugSystem:draw()

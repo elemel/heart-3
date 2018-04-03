@@ -2,6 +2,7 @@ local BodyManager = require("heart.physics.BodyManager")
 local CircleFixtureManager = require("heart.physics.CircleFixtureManager")
 local mathUtils = require("heart.math.utils")
 local MotorJointManager = require("heart.physics.MotorJointManager")
+local PolygonFixtureManager = require("heart.physics.PolygonFixtureManager")
 local PrismaticJointManager = require("heart.physics.PrismaticJointManager")
 
 local RectangleFixtureManager =
@@ -41,6 +42,7 @@ function PhysicsSystem:init(game, config)
   }
 
   self.circleFixtures = {}
+  self.polygonFixtures = {}
   self.rectangleFixtures = {}
   self.fixtureTangentSpeeds = {}
   self.motorJoints = {}
@@ -63,6 +65,7 @@ function PhysicsSystem:init(game, config)
   self.game.componentManagers.body = BodyManager.new(self)
   self.game.componentManagers.circleFixture = CircleFixtureManager.new(self)
   self.game.componentManagers.motorJoint = MotorJointManager.new(self)
+  self.game.componentManagers.polygonFixture = PolygonFixtureManager.new(self)
   self.game.componentManagers.prismaticJoint = PrismaticJointManager.new(self)
 
   self.game.componentManagers.rectangleFixture =

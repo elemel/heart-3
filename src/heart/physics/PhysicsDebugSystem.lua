@@ -15,20 +15,20 @@ function PhysicsDebugSystem:init(game, config)
   self.physicsSystem = assert(self.game.systems.physics)
 
   self.colors = config.colors or {
-    fixture = {0x00, 0xff, 0x00, 0xff},
+    fixture = {0, 1, 0, 1},
   }
 end
 
 function PhysicsDebugSystem:draw()
   local r, g, b, a = love.graphics.getColor()
 
-  for i, body in ipairs(self.physicsSystem.world:getBodyList()) do
+  for i, body in ipairs(self.physicsSystem.world:getBodies()) do
     local bodyComponent = body:getUserData()
 
     if self.colors["fixture"] then
       love.graphics.setColor(self.colors["fixture"])
 
-      for j, fixture in ipairs(body:getFixtureList()) do
+      for j, fixture in ipairs(body:getFixtures()) do
         local shape = fixture:getShape()
         local shapeType = shape:getType()
 
@@ -53,7 +53,7 @@ function PhysicsDebugSystem:draw()
     end
   end
 
-  for i, joint in ipairs(self.physicsSystem.world:getJointList()) do
+  for i, joint in ipairs(self.physicsSystem.world:getJoints()) do
     local jointType = joint:getType()
 
     if self.colors[jointType] then
