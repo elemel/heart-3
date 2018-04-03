@@ -186,7 +186,12 @@ function Game:createComponent(entityId, componentType, config)
     assert(not mask[componentType], "Component already exists")
   end
 
-  local manager = assert(self.componentManagers[componentType])
+  local manager = self.componentManagers[componentType]
+
+  if not manager then
+    error("No such component: " .. componentType)
+  end
+
   local component = manager:createComponent(entityId, config)
   mask[componentType] = true
   return component
