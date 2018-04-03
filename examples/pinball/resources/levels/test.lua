@@ -37,7 +37,7 @@ return {
 
     physicsDebug = {
       colors = {
-        fixture = {0x00, 0xff, 0x00, 0xff},
+        fixture = {0, 1, 0, 1},
       },
     },
 
@@ -50,7 +50,11 @@ return {
     },
 
     script = {
-      scripts = {},
+      scripts = {
+        curveFixture = "resources.scripts.CurveFixture",
+        eggFixtures = "resources.scripts.EggFixtures",
+        flipper = "resources.scripts.Flipper",
+      },
     },
   },
 
@@ -60,7 +64,7 @@ return {
         transform = {},
 
         camera = {
-          scale = 1 / 20,
+          scale = 0.02,
         },
       },
     },
@@ -68,12 +72,56 @@ return {
     {
       components = {
         transform = {},
+        body = {},
+      },
 
-        body = {
-          bodyType = "dynamic",
+      children = {
+        {
+          prototype = "resources.entities.flipper",
+
+          components = {
+            transform = {
+              x = -5,
+              y = 15,
+            },
+
+            flipper = {
+              key = "lshift",
+              direction = -1,
+            },
+          },
         },
 
-        circleFixture = {},
+        {
+          prototype = "resources.entities.flipper",
+
+          components = {
+            transform = {
+              x = 5,
+              y = 15,
+              angle = math.pi,
+            },
+
+            revoluteJoint = {
+              referenceAngle = math.pi,
+            },
+
+            flipper = {
+              key = "rshift",
+              direction = 1,
+            },
+          },
+        },
+      },
+    },
+
+    {
+      prototype = "resources.entities.ball",
+
+      components = {
+        transform = {
+          x = -2,
+        },
       },
     },
   },

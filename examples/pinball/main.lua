@@ -8,7 +8,7 @@ function love.load()
     resizable = true,
     highdpi = true,
     msaa = 8,
-    -- fullscreen = true,
+    fullscreen = true,
   })
 
   love.physics.setMeter(1)

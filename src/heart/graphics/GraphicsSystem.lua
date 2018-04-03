@@ -7,6 +7,7 @@ local ParticleSystemManager =
 
 local SpriteManager = require("heart.graphics.SpriteManager")
 local Topic = require("heart.game.Topic")
+local utils = require("heart.utils")
 
 local GraphicsSystem = {}
 GraphicsSystem.__index = GraphicsSystem

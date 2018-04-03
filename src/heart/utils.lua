@@ -182,4 +182,19 @@ function utils.topologicalOrdering(dag, reversed, tiebreaker)
   return ordering
 end
 
+-- https://en.wikipedia.org/wiki/Tangent_lines_to_circles#Outer_tangent
+function utils.circlesTangent(x1, y1, radius1, x2, y2, radius2)
+  local gamma = math.atan2(y2 - y1, x1 - x2)
+
+  local beta =
+    math.asin((radius1 - radius2) / math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2))
+
+  local alpha = gamma - beta
+  local x3 = x1 + radius1 * math.cos(0.5 * math.pi - alpha)
+  local y3 = y1 + radius1 * math.sin(0.5 * math.pi - alpha)
+  local x4 = x2 + radius2 * math.cos(0.5 * math.pi - alpha)
+  local y4 = y2 + radius2 * math.sin(0.5 * math.pi - alpha)
+  return x3, y3, x4, y4
+end
+
 return utils
