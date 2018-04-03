@@ -52,8 +52,8 @@ return {
     script = {
       scripts = {
         curveFixture = "resources.scripts.CurveFixture",
-        eggFixtures = "resources.scripts.EggFixtures",
         flipper = "resources.scripts.Flipper",
+        hullFixtures = "resources.scripts.HullFixtures",
       },
     },
   },
