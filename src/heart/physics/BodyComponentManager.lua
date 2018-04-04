@@ -1,20 +1,20 @@
-local BodyManager = {}
-BodyManager.__index = BodyManager
-BodyManager.dependencies = {"transform"}
+local BodyComponentManager = {}
+BodyComponentManager.__index = BodyComponentManager
+BodyComponentManager.dependencies = {"transform"}
 
-function BodyManager.new(...)
-  local instance = setmetatable({}, BodyManager)
+function BodyComponentManager.new(...)
+  local instance = setmetatable({}, BodyComponentManager)
   instance:init(...)
   return instance
 end
 
-function BodyManager:init(physicsSystem)
+function BodyComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function BodyManager:createComponent(entityId, config)
+function BodyComponentManager:createComponent(entityId, config)
   local x, y, angle = self.transformSystem:getWorldTransform(entityId)
   local bodyType = config.bodyType or "static"
   local body = love.physics.newBody(self.physicsSystem.world, x, y, bodyType)
@@ -34,7 +34,7 @@ function BodyManager:createComponent(entityId, config)
   return body
 end
 
-function BodyManager:destroyComponent(entityId)
+function BodyComponentManager:destroyComponent(entityId)
   local updateType = assert(self.physicsSystem.bodyUpdateTypes[entityId])
   self.physicsSystem.bodyUpdateTypes[entityId] = nil
   self.physicsSystem.bodyUpdateGroups[updateType][entityId] = nil
@@ -42,4 +42,4 @@ function BodyManager:destroyComponent(entityId)
   self.physicsSystem.bodies[entityId] = body
 end
 
-return BodyManager
+return BodyComponentManager

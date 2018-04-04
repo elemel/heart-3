@@ -1,4 +1,4 @@
-local ScriptManager = require("heart.script.ScriptManager")
+local ScriptComponentManager = require("heart.script.ScriptComponentManager")
 
 local ScriptSystem = {}
 ScriptSystem.__index = ScriptSystem
@@ -21,7 +21,8 @@ function ScriptSystem:init(game, config)
       self.scripts[componentType] = {}
 
       self.game.componentManagers[componentType] =
-          ScriptManager.new(self, componentType, scriptClass.dependencies)
+          ScriptComponentManager.new(
+            self, componentType, scriptClass.dependencies)
     end
   end
 end

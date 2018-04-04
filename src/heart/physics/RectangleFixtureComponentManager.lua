@@ -1,22 +1,22 @@
 local mathUtils = require("heart.math.utils")
 
-local RectangleFixtureManager = {}
-RectangleFixtureManager.__index = RectangleFixtureManager
-RectangleFixtureManager.dependencies = {"body"}
+local RectangleFixtureComponentManager = {}
+RectangleFixtureComponentManager.__index = RectangleFixtureComponentManager
+RectangleFixtureComponentManager.dependencies = {"body"}
 
-function RectangleFixtureManager.new(...)
-  local instance = setmetatable({}, RectangleFixtureManager)
+function RectangleFixtureComponentManager.new(...)
+  local instance = setmetatable({}, RectangleFixtureComponentManager)
   instance:init(...)
   return instance
 end
 
-function RectangleFixtureManager:init(physicsSystem)
+function RectangleFixtureComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function RectangleFixtureManager:createComponent(entityId, config)
+function RectangleFixtureComponentManager:createComponent(entityId, config)
   local bodyId =
     assert(config.body or self.game:findAncestorComponent(entityId, "body"))
 
@@ -46,9 +46,9 @@ function RectangleFixtureManager:createComponent(entityId, config)
   return fixture
 end
 
-function RectangleFixtureManager:destroyComponent(entityId)
+function RectangleFixtureComponentManager:destroyComponent(entityId)
   self.physicsSystem.rectangleFixtures[entityId]:destroy()
   self.physicsSystem.rectangleFixtures[entityId] = nil
 end
 
-return RectangleFixtureManager
+return RectangleFixtureComponentManager

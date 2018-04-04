@@ -1,22 +1,22 @@
 local mathUtils = require("heart.math.utils")
 
-local CircleFixtureManager = {}
-CircleFixtureManager.__index = CircleFixtureManager
-CircleFixtureManager.dependencies = {"body", "transform"}
+local CircleFixtureComponentManager = {}
+CircleFixtureComponentManager.__index = CircleFixtureComponentManager
+CircleFixtureComponentManager.dependencies = {"body", "transform"}
 
-function CircleFixtureManager.new(...)
-  local instance = setmetatable({}, CircleFixtureManager)
+function CircleFixtureComponentManager.new(...)
+  local instance = setmetatable({}, CircleFixtureComponentManager)
   instance:init(...)
   return instance
 end
 
-function CircleFixtureManager:init(physicsSystem)
+function CircleFixtureComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function CircleFixtureManager:createComponent(entityId, config)
+function CircleFixtureComponentManager:createComponent(entityId, config)
   local bodyId = assert(self.game:findAncestorComponent(entityId, "body"))
   local body = assert(self.physicsSystem.bodies[bodyId])
   local x = config.x or 0
@@ -45,11 +45,11 @@ function CircleFixtureManager:createComponent(entityId, config)
   return fixture
 end
 
-function CircleFixtureManager:destroyComponent(entityId)
+function CircleFixtureComponentManager:destroyComponent(entityId)
   local fixture = assert(self.physicsSystem.circleFixtures[entityId])
   self.physicsSystem.fixtureTangentSpeeds[fixture] = nil
   fixture:destroy()
   self.physicsSystem.circleFixtures[entityId] = nil
 end
 
-return CircleFixtureManager
+return CircleFixtureComponentManager

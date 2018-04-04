@@ -1,4 +1,5 @@
-local CategoryManager = require("heart.category.CategoryManager")
+local CategoryComponentManager =
+  require("heart.category.CategoryComponentManager")
 
 local CategorySystem = {}
 CategorySystem.__index = CategorySystem
@@ -18,7 +19,7 @@ function CategorySystem:init(game, config)
       self.categories[componentType] = {}
 
       self.game.componentManagers[componentType] =
-        CategoryManager.new(self, componentType)
+        CategoryComponentManager.new(self, componentType)
     end
   end
 end

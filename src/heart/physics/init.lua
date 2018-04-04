@@ -1,15 +1,29 @@
 local physics = {}
 
-physics.BodyManager = require("heart.physics.BodyManager")
-physics.CircleFixtureManager = require("heart.physics.CircleFixtureManager")
-physics.MotorJointManager = require("heart.physics.MotorJointManager")
+physics.BodyComponentManager = require("heart.physics.BodyComponentManager")
+
+physics.ChainFixtureComponentManager =
+  require("heart.physics.ChainFixtureComponentManager")
+
+physics.CircleFixtureComponentManager =
+  require("heart.physics.CircleFixtureComponentManager")
+
+physics.MotorJointComponentManager =
+  require("heart.physics.MotorJointComponentManager")
+
 physics.PhysicsDebugSystem = require("heart.physics.PhysicsDebugSystem")
 physics.PhysicsSystem = require("heart.physics.PhysicsSystem")
-physics.PrismaticJointManager = require("heart.physics.PrismaticJointManager")
 
-physics.RectangleFixtureManager =
-    require("heart.physics.RectangleFixtureManager")
+physics.PolygonFixtureComponentManager =
+    require("heart.physics.PolygonFixtureComponentManager")
 
-physics.RevoluteJointManager = require("heart.physics.RevoluteJointManager")
+physics.PrismaticJointComponentManager =
+  require("heart.physics.PrismaticJointComponentManager")
+
+physics.RectangleFixtureComponentManager =
+    require("heart.physics.RectangleFixtureComponentManager")
+
+physics.RevoluteJointComponentManager =
+  require("heart.physics.RevoluteJointComponentManager")
 
 return physics

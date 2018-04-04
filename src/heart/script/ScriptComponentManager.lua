@@ -1,13 +1,13 @@
-local ScriptManager = {}
-ScriptManager.__index = ScriptManager
+local ScriptComponentManager = {}
+ScriptComponentManager.__index = ScriptComponentManager
 
-function ScriptManager.new(...)
-  local instance = setmetatable({}, ScriptManager)
+function ScriptComponentManager.new(...)
+  local instance = setmetatable({}, ScriptComponentManager)
   instance:init(...)
   return instance
 end
 
-function ScriptManager:init(scriptSystem, componentType, dependencies)
+function ScriptComponentManager:init(scriptSystem, componentType, dependencies)
   self.scriptSystem = assert(scriptSystem)
   self.componentType = assert(componentType)
   self.dependencies = dependencies
@@ -16,13 +16,13 @@ function ScriptManager:init(scriptSystem, componentType, dependencies)
   self.scripts = assert(self.scriptSystem.scripts[self.componentType])
 end
 
-function ScriptManager:createComponent(entityId, config)
+function ScriptComponentManager:createComponent(entityId, config)
   local script = assert(self.scriptClass.new(self.game, entityId, config))
   self.scripts[entityId] = script
   return script
 end
 
-function ScriptManager:destroyComponent(entityId)
+function ScriptComponentManager:destroyComponent(entityId)
   local script = assert(self.scripts[entityId])
   self.scripts[entityId] = nil
 
@@ -31,4 +31,4 @@ function ScriptManager:destroyComponent(entityId)
   end
 end
 
-return ScriptManager
+return ScriptComponentManager

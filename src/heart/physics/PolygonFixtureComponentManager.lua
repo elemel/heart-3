@@ -1,22 +1,22 @@
 local mathUtils = require("heart.math.utils")
 
-local PolygonFixtureManager = {}
-PolygonFixtureManager.__index = PolygonFixtureManager
-PolygonFixtureManager.dependencies = {"body"}
+local PolygonFixtureComponentManager = {}
+PolygonFixtureComponentManager.__index = PolygonFixtureComponentManager
+PolygonFixtureComponentManager.dependencies = {"body"}
 
-function PolygonFixtureManager.new(...)
-  local instance = setmetatable({}, PolygonFixtureManager)
+function PolygonFixtureComponentManager.new(...)
+  local instance = setmetatable({}, PolygonFixtureComponentManager)
   instance:init(...)
   return instance
 end
 
-function PolygonFixtureManager:init(physicsSystem)
+function PolygonFixtureComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function PolygonFixtureManager:createComponent(entityId, config)
+function PolygonFixtureComponentManager:createComponent(entityId, config)
   local bodyId =
     assert(config.body or self.game:findAncestorComponent(entityId, "body"))
 
@@ -48,9 +48,9 @@ function PolygonFixtureManager:createComponent(entityId, config)
   return fixture
 end
 
-function PolygonFixtureManager:destroyComponent(entityId)
+function PolygonFixtureComponentManager:destroyComponent(entityId)
   self.physicsSystem.polygonFixtures[entityId]:destroy()
   self.physicsSystem.polygonFixtures[entityId] = nil
 end
 
-return PolygonFixtureManager
+return PolygonFixtureComponentManager

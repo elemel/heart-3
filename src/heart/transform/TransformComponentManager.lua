@@ -1,21 +1,21 @@
 local Matrix = require("heart.math.Matrix")
 local mathUtils = require("heart.math.utils")
 
-local TransformManager = {}
-TransformManager.__index = TransformManager
+local TransformComponentManager = {}
+TransformComponentManager.__index = TransformComponentManager
 
-function TransformManager.new(...)
-  local instance = setmetatable({}, TransformManager)
+function TransformComponentManager.new(...)
+  local instance = setmetatable({}, TransformComponentManager)
   instance:init(...)
   return instance
 end
 
-function TransformManager:init(transformSystem)
+function TransformComponentManager:init(transformSystem)
   self.transformSystem = assert(transformSystem)
   self.game = assert(self.transformSystem.game)
 end
 
-function TransformManager:createComponent(entityId, config)
+function TransformComponentManager:createComponent(entityId, config)
   local x = config.x or 0
   local y = config.y or 0
   local angle = config.angle or 0
@@ -49,7 +49,7 @@ function TransformManager:createComponent(entityId, config)
   self.transformSystem:setParent(entityId, parentId)
 end
 
-function TransformManager:destroyComponent(entityId)
+function TransformComponentManager:destroyComponent(entityId)
   local children = self.transformSystem.children[entityId]
 
   if children then
@@ -81,4 +81,4 @@ function TransformManager:destroyComponent(entityId)
   self.transformSystem.dirty[entityId] = nil
 end
 
-return TransformManager
+return TransformComponentManager

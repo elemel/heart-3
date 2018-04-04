@@ -1,22 +1,22 @@
 local mathUtils = require("heart.math.utils")
 
-local RevoluteJointManager = {}
-RevoluteJointManager.__index = RevoluteJointManager
-RevoluteJointManager.dependencies = {"transform", "body"}
+local RevoluteJointComponentManager = {}
+RevoluteJointComponentManager.__index = RevoluteJointComponentManager
+RevoluteJointComponentManager.dependencies = {"transform", "body"}
 
-function RevoluteJointManager.new(...)
-  local joint = setmetatable({}, RevoluteJointManager)
+function RevoluteJointComponentManager.new(...)
+  local joint = setmetatable({}, RevoluteJointComponentManager)
   joint:init(...)
   return joint
 end
 
-function RevoluteJointManager:init(physicsSystem)
+function RevoluteJointComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function RevoluteJointManager:createComponent(entityId, config)
+function RevoluteJointComponentManager:createComponent(entityId, config)
   local parentX, parentY, parentAngle =
     self.transformSystem:getWorldTransform(entityId)
 
@@ -67,9 +67,9 @@ function RevoluteJointManager:createComponent(entityId, config)
   return joint
 end
 
-function RevoluteJointManager:destroyComponent(entityId)
+function RevoluteJointComponentManager:destroyComponent(entityId)
   self.physicsSystem.revoluteJoints[entityId]:destroy()
   self.physicsSystem.revoluteJoints[entityId] = nil
 end
 
-return RevoluteJointManager
+return RevoluteJointComponentManager

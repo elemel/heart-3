@@ -1,5 +1,8 @@
 local mathUtils = require("heart.math.utils")
-local TransformManager = require("heart.transform.TransformManager")
+
+local TransformComponentManager =
+  require("heart.transform.TransformComponentManager")
+
 local utils = require("heart.utils")
 
 local TransformSystem = {}
@@ -30,7 +33,7 @@ function TransformSystem:init(game)
   self.dirty = {}
   self.parents = {}
   self.children = {}
-  self.game.componentManagers.transform = TransformManager.new(self)
+  self.game.componentManagers.transform = TransformComponentManager.new(self)
   self.fixedUpdateSystem = assert(self.game.systems.fixedUpdate)
   self.fixedUpdateSystem.topics.physics:subscribe(self, self.fixedUpdate)
 end

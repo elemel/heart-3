@@ -1,15 +1,28 @@
-local BodyManager = require("heart.physics.BodyManager")
-local ChainFixtureManager = require("heart.physics.ChainFixtureManager")
-local CircleFixtureManager = require("heart.physics.CircleFixtureManager")
+local BodyComponentManager = require("heart.physics.BodyComponentManager")
+
+local ChainFixtureComponentManager =
+  require("heart.physics.ChainFixtureComponentManager")
+
+local CircleFixtureComponentManager =
+  require("heart.physics.CircleFixtureComponentManager")
+
 local mathUtils = require("heart.math.utils")
-local MotorJointManager = require("heart.physics.MotorJointManager")
-local PolygonFixtureManager = require("heart.physics.PolygonFixtureManager")
-local PrismaticJointManager = require("heart.physics.PrismaticJointManager")
 
-local RectangleFixtureManager =
-  require("heart.physics.RectangleFixtureManager")
+local MotorJointComponentManager =
+  require("heart.physics.MotorJointComponentManager")
 
-local RevoluteJointManager = require("heart.physics.RevoluteJointManager")
+local PolygonFixtureComponentManager =
+  require("heart.physics.PolygonFixtureComponentManager")
+
+local PrismaticJointComponentManager =
+  require("heart.physics.PrismaticJointComponentManager")
+
+local RectangleFixtureComponentManager =
+  require("heart.physics.RectangleFixtureComponentManager")
+
+local RevoluteJointComponentManager =
+  require("heart.physics.RevoluteJointComponentManager")
+
 local Topic = require("heart.game.Topic")
 
 local PhysicsSystem = {}
@@ -64,17 +77,28 @@ function PhysicsSystem:init(game, config)
     collision = Topic.new(),
   }
 
-  self.game.componentManagers.body = BodyManager.new(self)
-  self.game.componentManagers.chainFixture = ChainFixtureManager.new(self)
-  self.game.componentManagers.circleFixture = CircleFixtureManager.new(self)
-  self.game.componentManagers.motorJoint = MotorJointManager.new(self)
-  self.game.componentManagers.polygonFixture = PolygonFixtureManager.new(self)
-  self.game.componentManagers.prismaticJoint = PrismaticJointManager.new(self)
+  self.game.componentManagers.body = BodyComponentManager.new(self)
+
+  self.game.componentManagers.chainFixture =
+    ChainFixtureComponentManager.new(self)
+
+  self.game.componentManagers.circleFixture =
+    CircleFixtureComponentManager.new(self)
+
+  self.game.componentManagers.motorJoint = MotorJointComponentManager.new(self)
+
+  self.game.componentManagers.polygonFixture =
+    PolygonFixtureComponentManager.new(self)
+
+  self.game.componentManagers.prismaticJoint =
+    PrismaticJointComponentManager.new(self)
 
   self.game.componentManagers.rectangleFixture =
-    RectangleFixtureManager.new(self)
+    RectangleFixtureComponentManager.new(self)
 
-  self.game.componentManagers.revoluteJoint = RevoluteJointManager.new(self)
+  self.game.componentManagers.revoluteJoint =
+    RevoluteJointComponentManager.new(self)
+
   self.game.topics.quit:subscribe(self, self.quit)
 end
 

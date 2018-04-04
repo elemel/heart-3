@@ -1,22 +1,22 @@
 local mathUtils = require("heart.math.utils")
 
-local ChainFixtureManager = {}
-ChainFixtureManager.__index = ChainFixtureManager
-ChainFixtureManager.dependencies = {"body", "transform"}
+local ChainFixtureComponentManager = {}
+ChainFixtureComponentManager.__index = ChainFixtureComponentManager
+ChainFixtureComponentManager.dependencies = {"body", "transform"}
 
-function ChainFixtureManager.new(...)
-  local instance = setmetatable({}, ChainFixtureManager)
+function ChainFixtureComponentManager.new(...)
+  local instance = setmetatable({}, ChainFixtureComponentManager)
   instance:init(...)
   return instance
 end
 
-function ChainFixtureManager:init(physicsSystem)
+function ChainFixtureComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function ChainFixtureManager:createComponent(entityId, config)
+function ChainFixtureComponentManager:createComponent(entityId, config)
   local bodyId = assert(self.game:findAncestorComponent(entityId, "body"))
   local body = assert(self.physicsSystem.bodies[bodyId])
   local loop = config.loop or false
@@ -53,11 +53,11 @@ function ChainFixtureManager:createComponent(entityId, config)
   return fixture
 end
 
-function ChainFixtureManager:destroyComponent(entityId)
+function ChainFixtureComponentManager:destroyComponent(entityId)
   local fixture = assert(self.physicsSystem.chainFixtures[entityId])
   self.physicsSystem.fixtureTangentSpeeds[fixture] = nil
   fixture:destroy()
   self.physicsSystem.chainFixtures[entityId] = nil
 end
 
-return ChainFixtureManager
+return ChainFixtureComponentManager

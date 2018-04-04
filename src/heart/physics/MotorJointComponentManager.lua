@@ -1,18 +1,18 @@
-local MotorJointManager = {}
-MotorJointManager.__index = MotorJointManager
-MotorJointManager.dependencies = {"transform", "body"}
+local MotorJointComponentManager = {}
+MotorJointComponentManager.__index = MotorJointComponentManager
+MotorJointComponentManager.dependencies = {"transform", "body"}
 
-function MotorJointManager.new(...)
-  local joint = setmetatable({}, MotorJointManager)
+function MotorJointComponentManager.new(...)
+  local joint = setmetatable({}, MotorJointComponentManager)
   joint:init(...)
   return joint
 end
 
-function MotorJointManager:init(physicsSystem)
+function MotorJointComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
 end
 
-function MotorJointManager:createComponent(entityId, config)
+function MotorJointComponentManager:createComponent(entityId, config)
   local bodyId1 = assert(config.body1)
   local bodyId2 = config.body2 or entityId
   local body1 = assert(self.physicsSystem.bodies[bodyId1])
@@ -37,9 +37,9 @@ function MotorJointManager:createComponent(entityId, config)
   return joint
 end
 
-function MotorJointManager:destroyComponent(entityId)
+function MotorJointComponentManager:destroyComponent(entityId)
   self.physicsSystem.motorJoints[entityId]:destroy()
   self.physicsSystem.motorJoints[entityId] = nil
 end
 
-return MotorJointManager
+return MotorJointComponentManager

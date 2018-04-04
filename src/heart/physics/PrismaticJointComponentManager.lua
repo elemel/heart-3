@@ -1,20 +1,20 @@
-local PrismaticJointManager = {}
-PrismaticJointManager.__index = PrismaticJointManager
-PrismaticJointManager.dependencies = {"transform", "body"}
+local PrismaticJointComponentManager = {}
+PrismaticJointComponentManager.__index = PrismaticJointComponentManager
+PrismaticJointComponentManager.dependencies = {"transform", "body"}
 
-function PrismaticJointManager.new(...)
-  local joint = setmetatable({}, PrismaticJointManager)
+function PrismaticJointComponentManager.new(...)
+  local joint = setmetatable({}, PrismaticJointComponentManager)
   joint:init(...)
   return joint
 end
 
-function PrismaticJointManager:init(physicsSystem)
+function PrismaticJointComponentManager:init(physicsSystem)
   self.physicsSystem = assert(physicsSystem)
   self.game = assert(self.physicsSystem.game)
   self.transformSystem = assert(self.game.systems.transform)
 end
 
-function PrismaticJointManager:createComponent(entityId, config)
+function PrismaticJointComponentManager:createComponent(entityId, config)
   local worldMatrix = self.transformSystem:getWorldMatrix(entityId)
 
   local bodyId2 =
@@ -66,9 +66,9 @@ function PrismaticJointManager:createComponent(entityId, config)
   return joint
 end
 
-function PrismaticJointManager:destroyComponent(entityId)
+function PrismaticJointComponentManager:destroyComponent(entityId)
   self.physicsSystem.prismaticJoints[entityId]:destroy()
   self.physicsSystem.prismaticJoints[entityId] = nil
 end
 
-return PrismaticJointManager
+return PrismaticJointComponentManager

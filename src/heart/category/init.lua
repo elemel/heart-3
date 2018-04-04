@@ -1,6 +1,8 @@
 local category = {}
 
-category.CategoryManager = require("heart.category.CategoryManager")
+category.CategoryComponentManager =
+  require("heart.category.CategoryComponentManager")
+
 category.CategorySystem = require("heart.category.CategorySystem")
 
 return category

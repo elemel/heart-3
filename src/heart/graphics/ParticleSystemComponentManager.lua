@@ -1,18 +1,18 @@
-local ParticleSystemManager = {}
-ParticleSystemManager.__index = ParticleSystemManager
-ParticleSystemManager.dependencies = {"transform"}
+local ParticleSystemComponentManager = {}
+ParticleSystemComponentManager.__index = ParticleSystemComponentManager
+ParticleSystemComponentManager.dependencies = {"transform"}
 
-function ParticleSystemManager.new(...)
-  local instance = setmetatable({}, ParticleSystemManager)
+function ParticleSystemComponentManager.new(...)
+  local instance = setmetatable({}, ParticleSystemComponentManager)
   instance:init(...)
   return instance
 end
 
-function ParticleSystemManager:init(graphicsSystem)
+function ParticleSystemComponentManager:init(graphicsSystem)
   self.graphicsSystem = assert(graphicsSystem)
 end
 
-function ParticleSystemManager:createComponent(entityId, config)
+function ParticleSystemComponentManager:createComponent(entityId, config)
   local z = config.z or 0
   local blendMode = config.blendMode or "alpha"
   self.graphicsSystem.particleSystemZs[entityId] = z
@@ -85,7 +85,7 @@ function ParticleSystemManager:createComponent(entityId, config)
   self.graphicsSystem.particleSystems[entityId] = particleSystem
 end
 
-function ParticleSystemManager:destroyComponent(entityId)
+function ParticleSystemComponentManager:destroyComponent(entityId)
   local z = assert(self.graphicsSystem.particleSystemZs[entityId])
   self.graphicsSystem.particleSystems[entityId] = nil
   self.graphicsSystem.particleSystemZs[entityId] = nil
@@ -94,4 +94,4 @@ function ParticleSystemManager:destroyComponent(entityId)
   layer.particleSystems[entityId] = nil
 end
 
-return ParticleSystemManager
+return ParticleSystemComponentManager

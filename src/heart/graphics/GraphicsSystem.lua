@@ -1,11 +1,11 @@
-local CameraManager = require("heart.graphics.CameraManager")
+local CameraComponentManager = require("heart.graphics.CameraComponentManager")
 local MeshLoader = require("heart.graphics.MeshLoader")
-local MeshManager = require("heart.graphics.MeshManager")
+local MeshComponentManager = require("heart.graphics.MeshComponentManager")
 
-local ParticleSystemManager =
-    require("heart.graphics.ParticleSystemManager")
+local ParticleSystemComponentManager =
+    require("heart.graphics.ParticleSystemComponentManager")
 
-local SpriteManager = require("heart.graphics.SpriteManager")
+local SpriteComponentManager = require("heart.graphics.SpriteComponentManager")
 local Topic = require("heart.game.Topic")
 local utils = require("heart.utils")
 
@@ -76,10 +76,12 @@ function GraphicsSystem:init(game, config)
     end
   end
 
-  self.game.componentManagers.camera = CameraManager.new(self)
-  self.game.componentManagers.mesh = MeshManager.new(self)
-  self.game.componentManagers.sprite = SpriteManager.new(self)
-  self.game.componentManagers.particleSystem = ParticleSystemManager.new(self)
+  self.game.componentManagers.camera = CameraComponentManager.new(self)
+  self.game.componentManagers.mesh = MeshComponentManager.new(self)
+  self.game.componentManagers.sprite = SpriteComponentManager.new(self)
+
+  self.game.componentManagers.particleSystem =
+    ParticleSystemComponentManager.new(self)
 end
 
 function GraphicsSystem:update(dt)

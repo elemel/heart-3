@@ -1,18 +1,18 @@
-local SpriteManager = {}
-SpriteManager.__index = SpriteManager
-SpriteManager.dependencies = {"transform"}
+local SpriteComponentManager = {}
+SpriteComponentManager.__index = SpriteComponentManager
+SpriteComponentManager.dependencies = {"transform"}
 
-function SpriteManager.new(...)
-  local instance = setmetatable({}, SpriteManager)
+function SpriteComponentManager.new(...)
+  local instance = setmetatable({}, SpriteComponentManager)
   instance:init(...)
   return instance
 end
 
-function SpriteManager:init(graphicsSystem)
+function SpriteComponentManager:init(graphicsSystem)
   self.graphicsSystem = assert(graphicsSystem)
 end
 
-function SpriteManager:createComponent(entityId, config)
+function SpriteComponentManager:createComponent(entityId, config)
   local z = config.z or 0
   self.graphicsSystem.spriteZs[entityId] = z
   self.graphicsSystem.spriteScaleXs[entityId] = config.scaleX or 1
@@ -26,7 +26,7 @@ function SpriteManager:createComponent(entityId, config)
   layer.spriteImages[entityId] = image
 end
 
-function SpriteManager:destroyComponent(entityId)
+function SpriteComponentManager:destroyComponent(entityId)
   local z = assert(self.graphicsSystem.spriteZs[entityId])
   self.graphicsSystem.spriteZs[entityId] = nil
   self.graphicsSystem.spriteScaleXs[entityId] = nil
@@ -37,4 +37,4 @@ function SpriteManager:destroyComponent(entityId)
   layer.spriteImages[entityId] = nil
 end
 
-return SpriteManager
+return SpriteComponentManager
