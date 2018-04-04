@@ -11,6 +11,7 @@ function love.load()
     -- fullscreen = true,
   })
 
+  love.mouse.setVisible(false)
   love.physics.setMeter(1)
 
   local gameContext = {
