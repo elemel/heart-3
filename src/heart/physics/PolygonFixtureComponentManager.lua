@@ -45,10 +45,18 @@ function PolygonFixtureComponentManager:createComponent(entityId, config)
   fixture:setGroupIndex(config.groupIndex or 0)
   fixture:setSensor(config.sensor or false)
   self.physicsSystem.polygonFixtures[entityId] = fixture
+  local tangentSpeed = config.tangentSpeed or 0
+
+  if tangentSpeed ~= 0 then
+    self.physicsSystem.fixtureTangentSpeeds[fixture] = tangentSpeed
+  end
+
   return fixture
 end
 
 function PolygonFixtureComponentManager:destroyComponent(entityId)
+  local fixture = assert(self.physicsSystem.polygonFixtures[entityId])
+  self.physicsSystem.fixtureTangentSpeeds[fixture] = nil
   self.physicsSystem.polygonFixtures[entityId]:destroy()
   self.physicsSystem.polygonFixtures[entityId] = nil
 end

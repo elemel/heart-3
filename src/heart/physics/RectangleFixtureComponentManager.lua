@@ -43,10 +43,18 @@ function RectangleFixtureComponentManager:createComponent(entityId, config)
   fixture:setGroupIndex(config.groupIndex or 0)
   fixture:setSensor(config.sensor or false)
   self.physicsSystem.rectangleFixtures[entityId] = fixture
+  local tangentSpeed = config.tangentSpeed or 0
+
+  if tangentSpeed ~= 0 then
+    self.physicsSystem.fixtureTangentSpeeds[fixture] = tangentSpeed
+  end
+
   return fixture
 end
 
 function RectangleFixtureComponentManager:destroyComponent(entityId)
+  local fixture = assert(self.physicsSystem.rectangleFixtures[entityId])
+  self.physicsSystem.fixtureTangentSpeeds[fixture] = nil
   self.physicsSystem.rectangleFixtures[entityId]:destroy()
   self.physicsSystem.rectangleFixtures[entityId] = nil
 end
