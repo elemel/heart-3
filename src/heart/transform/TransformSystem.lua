@@ -39,13 +39,7 @@ function TransformSystem:init(game)
 end
 
 function TransformSystem:fixedUpdate(dt)
-  while true do
-    local entityId = next(self.dirty)
-
-    if not entityId then
-      break
-    end
-
+  for entityId in pairs(self.dirty) do
     self:setDirty(entityId, false)
   end
 
@@ -58,15 +52,9 @@ function TransformSystem:fixedUpdate(dt)
 end
 
 function TransformSystem:movePairs(source, target)
-  while true do
-    local key, value = next(source)
-
-    if key == nil then
-      return
-    end
-
-    source[key] = nil
-    target[key] = value
+  for k, v in pairs(source) do
+    source[k] = nil
+    target[k] = v
   end
 end
 

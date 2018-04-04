@@ -11,13 +11,7 @@ function utils.index(t, v)
 end
 
 function utils.clear(t)
-  while true do
-    local k, _ = next(t)
-
-    if k == nil then
-      return
-    end
-
+  for k, v in pairs(t) do
     t[k] = nil
   end
 end
@@ -25,7 +19,7 @@ end
 function utils.keys(t)
   local keys = {}
 
-  for k, _ in pairs(t) do
+  for k in pairs(t) do
     table.insert(keys, k)
   end
 

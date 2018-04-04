@@ -54,13 +54,9 @@ function TransformComponentManager:destroyComponent(entityId)
 
   if children then
     while true do
-      local childId = next(children)
-
-      if not childId then
-        break
+      for childId in pairs(children) do
+        self.transformSystem:setParent(childId, nil)
       end
-
-      self.transformSystem:setParent(childId, nil)
     end
   end
 
