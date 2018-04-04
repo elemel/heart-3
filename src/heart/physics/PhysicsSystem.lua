@@ -1,4 +1,5 @@
 local BodyManager = require("heart.physics.BodyManager")
+local ChainFixtureManager = require("heart.physics.ChainFixtureManager")
 local CircleFixtureManager = require("heart.physics.CircleFixtureManager")
 local mathUtils = require("heart.math.utils")
 local MotorJointManager = require("heart.physics.MotorJointManager")
@@ -41,6 +42,7 @@ function PhysicsSystem:init(game, config)
     animated = {},
   }
 
+  self.chainFixtures = {}
   self.circleFixtures = {}
   self.polygonFixtures = {}
   self.rectangleFixtures = {}
@@ -63,6 +65,7 @@ function PhysicsSystem:init(game, config)
   }
 
   self.game.componentManagers.body = BodyManager.new(self)
+  self.game.componentManagers.chainFixture = ChainFixtureManager.new(self)
   self.game.componentManagers.circleFixture = CircleFixtureManager.new(self)
   self.game.componentManagers.motorJoint = MotorJointManager.new(self)
   self.game.componentManagers.polygonFixture = PolygonFixtureManager.new(self)
@@ -72,6 +75,7 @@ function PhysicsSystem:init(game, config)
     RectangleFixtureManager.new(self)
 
   self.game.componentManagers.revoluteJoint = RevoluteJointManager.new(self)
+  self.game.topics.quit:subscribe(self, self.quit)
 end
 
 function PhysicsSystem:updatePhysics(dt)
@@ -146,6 +150,9 @@ function PhysicsSystem:getPreSolveCallback()
       contact:setTangentSpeed(tangentSpeed)
     end
   end
+end
+
+function PhysicsSystem:quit()
 end
 
 return PhysicsSystem

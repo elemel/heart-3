@@ -14,9 +14,11 @@ function CurveFixture:init(game, entityId, config)
   self.game = assert(game)
   self.entityId = assert(entityId)
   local controlPoints = assert(config.controlPoints)
+  local curve = love.math.newBezierCurve(controlPoints)
+  local points = curve:render(5)
 
   self.game:createComponent(self.entityId, "chainFixture", {
-    points = {},
+    points = points,
   })
 end
 

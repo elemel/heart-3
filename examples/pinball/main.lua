@@ -8,7 +8,7 @@ function love.load()
     resizable = true,
     highdpi = true,
     msaa = 8,
-    fullscreen = true,
+    -- fullscreen = true,
   })
 
   love.physics.setMeter(1)
@@ -31,14 +31,18 @@ function love.load()
   game = heart.game.Game.new(gameContext, gameConfig)
 end
 
-function love.update(...)
-  game.topics.update:publish(...)
-end
-
 function love.draw(...)
   game.topics.draw:publish(...)
 end
 
 function love.keypressed(...)
   game.topics.keypressed:publish(...)
+end
+
+function love.quit(...)
+  game.topics.quit:publish(...)
+end
+
+function love.update(...)
+  game.topics.update:publish(...)
 end

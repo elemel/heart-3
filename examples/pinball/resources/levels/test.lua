@@ -2,6 +2,7 @@ return {
   topics = {
     "draw",
     "keypressed",
+    "quit",
     "update",
   },
 
@@ -28,7 +29,7 @@ return {
     },
 
     transform = {},
-    transformDebug = {},
+    -- transformDebug = {},
 
     physics = {
       gravityX = 0,
@@ -109,6 +110,49 @@ return {
             flipper = {
               key = "rshift",
               direction = 1,
+            },
+          },
+        },
+
+        {
+          components = {
+            transform = {},
+
+            curveFixture = {
+              controlPoints = {
+                -25, 0,
+                -25, -20,
+                25, -20,
+                25, 0,
+              },
+            },
+          },
+        },
+
+        {
+          components = {
+            transform = {},
+
+            curveFixture = {
+              controlPoints = {
+                -25, 0,
+                -25, 10,
+                -5, 14,
+              },
+            },
+          },
+        },
+
+        {
+          components = {
+            transform = {},
+
+            curveFixture = {
+              controlPoints = {
+                25, 0,
+                25, 10,
+                5, 14,
+              },
             },
           },
         },
