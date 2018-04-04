@@ -83,7 +83,7 @@ return {
           components = {
             transform = {
               x = -5,
-              y = 15,
+              y = 16,
             },
 
             flipper = {
@@ -99,7 +99,7 @@ return {
           components = {
             transform = {
               x = 5,
-              y = 15,
+              y = 16,
               angle = math.pi,
             },
 
@@ -120,10 +120,9 @@ return {
 
             curveFixture = {
               controlPoints = {
-                -25, 0,
-                -25, -20,
-                25, -20,
-                25, 0,
+                -30, 0,
+                -30, -18,
+                0, -18,
               },
             },
           },
@@ -135,9 +134,9 @@ return {
 
             curveFixture = {
               controlPoints = {
-                -25, 0,
-                -25, 10,
-                -5, 14,
+                30, 0,
+                30, -18,
+                0, -18,
               },
             },
           },
@@ -149,9 +148,23 @@ return {
 
             curveFixture = {
               controlPoints = {
-                25, 0,
-                25, 10,
-                5, 14,
+                -30, 0,
+                -30, 10,
+                -5, 15,
+              },
+            },
+          },
+        },
+
+        {
+          components = {
+            transform = {},
+
+            curveFixture = {
+              controlPoints = {
+                30, 0,
+                30, 10,
+                5, 15,
               },
             },
           },
