@@ -8,6 +8,7 @@ return {
 
     circleFixture = {
       radius = 17 / 32,
+      restitution = 0.3,
     },
   },
 }

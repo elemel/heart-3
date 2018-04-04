@@ -40,6 +40,7 @@ function RectangleFixtureComponentManager:createComponent(entityId, config)
   local fixture = love.physics.newFixture(body, shape, density)
   fixture:setUserData(entityId)
   fixture:setFriction(config.friction or 0.2)
+  fixture:setRestitution(config.restitution or 0)
   fixture:setGroupIndex(config.groupIndex or 0)
   fixture:setSensor(config.sensor or false)
   self.physicsSystem.rectangleFixtures[entityId] = fixture
