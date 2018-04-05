@@ -21,7 +21,7 @@ local RectangleFixtureComponentManager =
 local RevoluteJointComponentManager =
   require("heart.physics.RevoluteJointComponentManager")
 
-local Topic = require("heart.game.Topic")
+local Topic = require("heart.event.Topic")
 
 local PhysicsSystem = {}
 PhysicsSystem.__index = PhysicsSystem

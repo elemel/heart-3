@@ -1,4 +1,4 @@
-local Topic = require("heart.game.Topic")
+local Topic = require("heart.event.Topic")
 
 local FixedUpdateSystem = {}
 FixedUpdateSystem.__index = FixedUpdateSystem

@@ -17,14 +17,14 @@ function love.load()
   local gameContext = {
     systemClasses = {
       category = assert(heart.category.CategorySystem),
-      fixedUpdate = assert(heart.update.FixedUpdateSystem),
+      fixedUpdate = assert(heart.event.FixedUpdateSystem),
       graphics = assert(heart.graphics.GraphicsSystem),
       physics = assert(heart.physics.PhysicsSystem),
       physicsDebug = assert(heart.physics.PhysicsDebugSystem),
       script = assert(heart.script.ScriptSystem),
       transform = assert(heart.math.TransformSystem),
       transformDebug = assert(heart.math.TransformDebugSystem),
-      update = assert(heart.update.UpdateSystem),
+      update = assert(heart.event.UpdateSystem),
     },
   }
 
