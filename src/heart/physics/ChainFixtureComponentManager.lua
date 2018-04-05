@@ -1,4 +1,4 @@
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local ChainFixtureComponentManager = {}
 ChainFixtureComponentManager.__index = ChainFixtureComponentManager
@@ -30,7 +30,7 @@ function ChainFixtureComponentManager:createComponent(entityId, config)
   for i = 1, #points, 2 do
     local x = points[i]
     local y = points[i + 1]
-    x, y = mathUtils.toWorldPoint2(x, y, parentX, parentY, parentAngle)
+    x, y = heartMath.toWorldPoint2(x, y, parentX, parentY, parentAngle)
     x, y = body:getLocalPoint(x, y)
     table.insert(localPoints, x)
     table.insert(localPoints, y)

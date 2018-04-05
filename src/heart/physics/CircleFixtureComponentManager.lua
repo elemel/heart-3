@@ -1,4 +1,4 @@
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local CircleFixtureComponentManager = {}
 CircleFixtureComponentManager.__index = CircleFixtureComponentManager
@@ -25,7 +25,7 @@ function CircleFixtureComponentManager:createComponent(entityId, config)
   local parentX, parentY, parentAngle =
     self.transformSystem:getWorldTransform(entityId)
 
-  x, y = mathUtils.toWorldPoint2(x, y, parentX, parentY, parentAngle)
+  x, y = heartMath.toWorldPoint2(x, y, parentX, parentY, parentAngle)
   x, y = body:getLocalPoint(x, y)
   local radius = config.radius or 0.5
   local shape = love.physics.newCircleShape(x, y, radius)

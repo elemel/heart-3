@@ -6,8 +6,6 @@ local ChainFixtureComponentManager =
 local CircleFixtureComponentManager =
   require("heart.physics.CircleFixtureComponentManager")
 
-local mathUtils = require("heart.math.utils")
-
 local MotorJointComponentManager =
   require("heart.physics.MotorJointComponentManager")
 

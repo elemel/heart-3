@@ -1,4 +1,4 @@
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local RevoluteJointComponentManager = {}
 RevoluteJointComponentManager.__index = RevoluteJointComponentManager
@@ -35,10 +35,10 @@ function RevoluteJointComponentManager:createComponent(entityId, config)
   local anchorY2 = config.anchorY2 or 0
 
   anchorX1, anchorY1 =
-    mathUtils.toWorldPoint2(anchorX1, anchorY1, parentX, parentY, parentAngle)
+    heartMath.toWorldPoint2(anchorX1, anchorY1, parentX, parentY, parentAngle)
 
   anchorX2, anchorY2 =
-    mathUtils.toWorldPoint2(anchorX2, anchorY2, parentX, parentY, parentAngle)
+    heartMath.toWorldPoint2(anchorX2, anchorY2, parentX, parentY, parentAngle)
 
   local collideConnected = config.collideConnected or false
   local referenceAngle = config.referenceAngle or 0

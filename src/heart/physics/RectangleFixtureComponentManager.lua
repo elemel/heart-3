@@ -1,4 +1,4 @@
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local RectangleFixtureComponentManager = {}
 RectangleFixtureComponentManager.__index = RectangleFixtureComponentManager
@@ -29,7 +29,7 @@ function RectangleFixtureComponentManager:createComponent(entityId, config)
     self.transformSystem:getWorldTransform(entityId)
 
   x, y, angle =
-    mathUtils.toWorldTransform2(x, y, angle, parentX, parentY, parentAngle)
+    heartMath.toWorldTransform2(x, y, angle, parentX, parentY, parentAngle)
 
   x, y = body:getLocalPoint(x, y)
   angle = angle - body:getAngle()

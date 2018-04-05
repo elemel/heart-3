@@ -1,4 +1,4 @@
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local TransformComponentManager =
   require("heart.transform.TransformComponentManager")
@@ -145,7 +145,7 @@ function TransformSystem:setDirty(entityId, dirty)
           local parentAngle = self.worldAngles[parentId]
 
           x, y, angle =
-            mathUtils.toWorldTransform2(
+            heartMath.toWorldTransform2(
               x, y, angle, parentX, parentY, parentAngle)
         end
 
@@ -163,7 +163,7 @@ function TransformSystem:setDirty(entityId, dirty)
           local parentAngle = self.worldAngles[parentId]
 
           x, y, angle =
-            mathUtils.toLocalTransform2(
+            heartMath.toLocalTransform2(
               x, y, angle, parentX, parentY, parentAngle)
         end
 
@@ -186,8 +186,8 @@ function TransformSystem:getTransform(entityId, t)
     return self.xs[entityId], self.ys[entityId], self.angles[entityId]
   end
 
-  local mixedX = mathUtils.mix(self.previousXs[entityId], self.xs[entityId], t)
-  local mixedY = mathUtils.mix(self.previousYs[entityId], self.ys[entityId], t)
+  local mixedX = heartMath.mix(self.previousXs[entityId], self.xs[entityId], t)
+  local mixedY = heartMath.mix(self.previousYs[entityId], self.ys[entityId], t)
 
   local mixedAngle =
     mathUtils.mixAngles(self.previousAngles[entityId], self.angles[entityId], t)
@@ -221,13 +221,13 @@ function TransformSystem:getWorldTransform(entityId, t)
   end
 
   local mixedX =
-    mathUtils.mix(self.previousWorldXs[entityId], self.worldXs[entityId], t)
+    heartMath.mix(self.previousWorldXs[entityId], self.worldXs[entityId], t)
 
   local mixedY =
-    mathUtils.mix(self.previousWorldYs[entityId], self.worldYs[entityId], t)
+    heartMath.mix(self.previousWorldYs[entityId], self.worldYs[entityId], t)
 
   local mixedAngle =
-    mathUtils.mixAngles(
+    heartMath.mixAngles(
       self.previousWorldAngles[entityId], self.worldAngles[entityId], t)
 
   return mixedX, mixedY, mixedAngle

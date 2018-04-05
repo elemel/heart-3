@@ -1,5 +1,4 @@
-local Matrix = require("heart.math.Matrix")
-local mathUtils = require("heart.math.utils")
+local heartMath = require("heart.math")
 
 local TransformComponentManager = {}
 TransformComponentManager.__index = TransformComponentManager
@@ -29,7 +28,7 @@ function TransformComponentManager:createComponent(entityId, config)
       self.transformSystem:getWorldTransform(parentId)
 
     worldX, worldY, worldAngle =
-      mathUtils.toWorldTransform2(
+      heartMath.toWorldTransform2(
         worldX, worldY, worldAngle, parentX, parentY, parentAngle)
   end
 
