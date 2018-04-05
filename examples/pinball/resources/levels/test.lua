@@ -33,7 +33,7 @@ return {
 
     physics = {
       gravityX = 0,
-      gravityY = 20,
+      gravityY = 50,
     },
 
     physicsDebug = {
@@ -82,7 +82,7 @@ return {
 
           components = {
             transform = {
-              x = -5,
+              x = -8,
               y = 16,
             },
 
@@ -98,7 +98,7 @@ return {
 
           components = {
             transform = {
-              x = 5,
+              x = 8,
               y = 16,
               angle = math.pi,
             },
@@ -120,8 +120,8 @@ return {
 
             curveFixture = {
               controlPoints = {
-                -30, 0,
-                -30, -18,
+                -25.7175, 0,
+                -25.7175, -18,
                 0, -18,
               },
             },
@@ -134,8 +134,8 @@ return {
 
             curveFixture = {
               controlPoints = {
-                30, 0,
-                30, -18,
+                25.7175, 0,
+                25.7175, -18,
                 0, -18,
               },
             },
@@ -148,9 +148,9 @@ return {
 
             curveFixture = {
               controlPoints = {
-                -30, 0,
-                -30, 10,
-                -5, 15,
+                -25.7175, 0,
+                -25.7175, 10,
+                -8, 15,
               },
             },
           },
@@ -162,9 +162,9 @@ return {
 
             curveFixture = {
               controlPoints = {
-                30, 0,
-                30, 10,
-                5, 15,
+                25.7175, 0,
+                25.7175, 10,
+                8, 15,
               },
             },
           },
@@ -177,7 +177,7 @@ return {
 
       components = {
         transform = {
-          x = -2,
+          x = -5,
         },
       },
     },

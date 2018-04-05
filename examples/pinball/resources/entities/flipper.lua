@@ -11,18 +11,18 @@ return {
       lowerLimit = -0.125 * math.pi,
       upperLimit = 0.125 * math.pi,
       motorEnabled = true,
-      maxMotorTorque = 10000,
+      maxMotorTorque = 50000,
     },
 
     flipper = {
       direction = -1,
-      speed = 100,
+      speed = 50,
     },
 
     hullFixtures = {
       circles = {
         0, 0, 1,
-        4, 0, 0.5,
+        6, 0, 0.5,
       },
     },
   },

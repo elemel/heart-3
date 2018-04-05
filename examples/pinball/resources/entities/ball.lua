@@ -7,14 +7,8 @@ return {
     },
 
     circleFixture = {
-      radius = 17 / 32,
+      radius = 1.35,
       restitution = 0.3,
-    },
-  },
-
-  children = {
-    {
-      prototype = "resources.entities.fire",
     },
   },
 }

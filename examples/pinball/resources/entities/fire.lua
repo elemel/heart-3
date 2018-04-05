@@ -5,24 +5,23 @@ return {
     particleSystem = {
       image = "resources/images/pixel.png",
       blendMode = "add",
-      emissionRate = 1000,
+      emissionRate = 2000,
       particleLifetime = 0.2,
 
       sizes = {
-        0.4,
+        0.5,
       },
 
       emissionArea = {
         distribution = "normal",
-        dx = 0.4,
-        dy = 0.4,
+        dx = 0.5,
+        dy = 0.5,
       },
 
       minLinearDamping = 5,
       maxLinearDamping = 10,
       maxSpeed = 5,
       spread = 2 * math.pi,
-      linearAccelerationY = -100,
       minRotation = -math.pi,
       maxRotation = math.pi,
 
