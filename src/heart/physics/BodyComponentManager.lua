@@ -1,3 +1,5 @@
+local heartMath = require("heart.math")
+
 local BodyComponentManager = {}
 BodyComponentManager.__index = BodyComponentManager
 BodyComponentManager.dependencies = {"transform"}
@@ -15,7 +17,8 @@ function BodyComponentManager:init(physicsSystem)
 end
 
 function BodyComponentManager:createComponent(entityId, config)
-  local x, y, angle = self.transformSystem:getWorldTransform(entityId)
+  local transform = self.transformSystem:getWorldTransform(entityId)
+  local x, y, angle = heartMath.decompose2(transform)
   local bodyType = config.bodyType or "static"
   local body = love.physics.newBody(self.physicsSystem.world, x, y, bodyType)
   body:setUserData(entityId)

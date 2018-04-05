@@ -11,4 +11,10 @@ return {
       restitution = 0.3,
     },
   },
+
+  children = {
+    {
+      prototype = "resources.entities.fire",
+    },
+  },
 }

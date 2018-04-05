@@ -11,7 +11,7 @@ return {
       lowerLimit = -0.125 * math.pi,
       upperLimit = 0.125 * math.pi,
       motorEnabled = true,
-      maxMotorTorque = 5000,
+      maxMotorTorque = 10000,
     },
 
     flipper = {

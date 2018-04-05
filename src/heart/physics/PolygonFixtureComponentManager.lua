@@ -22,16 +22,13 @@ function PolygonFixtureComponentManager:createComponent(entityId, config)
 
   local body = assert(self.physicsSystem.bodies[bodyId])
   local points = config.points or {-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5}
-
-  local parentX, parentY, parentAngle =
-    self.transformSystem:getWorldTransform(entityId)
-
+  local transform = self.transformSystem:getWorldTransform(entityId)
   local localPoints = {}
 
   for i = 1, #points, 2 do
     local x = points[i]
     local y = points[i + 1]
-    x, y = heartMath.toWorldPoint2(x, y, parentX, parentY, parentAngle)
+    x, y = transform:transformPoint(x, y)
     x, y = body:getLocalPoint(x, y)
     table.insert(localPoints, x)
     table.insert(localPoints, y)

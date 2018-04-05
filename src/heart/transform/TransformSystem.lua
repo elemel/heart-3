@@ -17,19 +17,8 @@ end
 
 function TransformSystem:init(game)
   self.game = assert(game)
-  self.previousXs = {}
-  self.previousYs = {}
-  self.previousAngles = {}
-  self.previousWorldXs = {}
-  self.previousWorldYs = {}
-  self.previousWorldAngles = {}
-  self.xs = setmetatable({}, {__index = self.previousXs})
-  self.ys = setmetatable({}, {__index = self.previousYs})
-  self.angles = setmetatable({}, {__index = self.previousAngles})
-  self.worldXs = setmetatable({}, {__index = self.previousWorldXs})
-  self.worldYs = setmetatable({}, {__index = self.previousWorldYs})
-  self.worldAngles = setmetatable({}, {__index = self.previousWorldAngles})
-  self.modes = {}
+  self.transforms = {}
+  self.worldTransforms = {}
   self.dirty = {}
   self.parents = {}
   self.children = {}
@@ -39,23 +28,6 @@ function TransformSystem:init(game)
 end
 
 function TransformSystem:fixedUpdate(dt)
-  for entityId in pairs(self.dirty) do
-    self:setDirty(entityId, false)
-  end
-
-  self:movePairs(self.xs, self.previousXs)
-  self:movePairs(self.ys, self.previousYs)
-  self:movePairs(self.angles, self.previousAngles)
-  self:movePairs(self.worldXs, self.previousWorldXs)
-  self:movePairs(self.worldYs, self.previousWorldYs)
-  self:movePairs(self.worldAngles, self.previousWorldAngles)
-end
-
-function TransformSystem:movePairs(source, target)
-  for k, v in pairs(source) do
-    source[k] = nil
-    target[k] = v
-  end
 end
 
 function TransformSystem:setMode(entityId, mode)
@@ -69,15 +41,13 @@ function TransformSystem:setMode(entityId, mode)
 end
 
 function TransformSystem:setParent(entityId, parentId, mode)
+  mode = mode or "local"
+  assert(mode == "local" or mode == "world")
   local currentParentId = self.parents[entityId]
 
   if parentId ~= currentParentId then
-    local currentMode
-
-    if mode then
-      assert(mode == "local" or mode == "world")
-      currentMode = self.modes[entityId]
-      self:setMode(entityId, mode)
+    if mode == "world" then
+      self:setDirty(entityId, false)
     end
 
     if currentParentId then
@@ -102,11 +72,21 @@ function TransformSystem:setParent(entityId, parentId, mode)
       siblings[entityId] = true
     end
 
-    self:setDirty(entityId, true)
+    if mode == "world" then
+      local transform = self.transforms[entityId]
+      local worldTransform = self.worldTransforms[entityId]
+      transform:reset()
 
-    if mode then
-      self:setMode(entityId, currentMode)
+      if parentId then
+        self:setDirty(parentId, false)
+        local parentWorldTransform = self.worldTransforms[parentId]
+        transform:apply(parentWorldTransform:inverse())
+      end
+
+      transform:apply(worldTransform)
     end
+
+    self:setDirty(entityId, true)
   end
 end
 
@@ -126,125 +106,30 @@ function TransformSystem:setDirty(entityId, dirty)
 
       self.dirty[entityId] = true
     else
+      local transform = self.transforms[entityId]
+      local worldTransform = self.worldTransforms[entityId]
+      worldTransform:reset()
       local parentId = self.parents[entityId]
 
       if parentId then
         self:setDirty(parentId, false)
+        local parentWorldTransform = self.worldTransforms[parentId]
+        worldTransform:apply(parentWorldTransform)
       end
 
-      local mode = self.modes[entityId]
-
-      if mode == "local" then
-        local x = self.xs[entityId]
-        local y = self.ys[entityId]
-        local angle = self.angles[entityId]
-
-        if parentId then
-          local parentX = self.worldXs[parentId]
-          local parentY = self.worldYs[parentId]
-          local parentAngle = self.worldAngles[parentId]
-
-          x, y, angle =
-            heartMath.toWorldTransform2(
-              x, y, angle, parentX, parentY, parentAngle)
-        end
-
-        self.worldXs[entityId] = x
-        self.worldYs[entityId] = y
-        self.worldAngles[entityId] = angle
-      else
-        local x = self.worldXs[entityId]
-        local y = self.worldYs[entityId]
-        local angle = self.worldAngles[entityId]
-
-        if parentId then
-          local parentX = self.worldXs[parentId]
-          local parentY = self.worldYs[parentId]
-          local parentAngle = self.worldAngles[parentId]
-
-          x, y, angle =
-            heartMath.toLocalTransform2(
-              x, y, angle, parentX, parentY, parentAngle)
-        end
-
-        self.xs[entityId] = x
-        self.ys[entityId] = y
-        self.angles[entityId] = angle
-      end
-
+      worldTransform:apply(transform)
       self.dirty[entityId] = nil
     end
   end
 end
 
 function TransformSystem:getTransform(entityId, t)
-  if self.modes[entityId] ~= "local" then
-    self:setDirty(entityId, false)
-  end
-
-  if not t then
-    return self.xs[entityId], self.ys[entityId], self.angles[entityId]
-  end
-
-  local mixedX = heartMath.mix(self.previousXs[entityId], self.xs[entityId], t)
-  local mixedY = heartMath.mix(self.previousYs[entityId], self.ys[entityId], t)
-
-  local mixedAngle =
-    mathUtils.mixAngles(self.previousAngles[entityId], self.angles[entityId], t)
-
-  return mixedX, mixedY, mixedAngle
-end
-
-function TransformSystem:setTransform(entityId, x, y, angle)
-  self:setMode(entityId, "local")
-
-  if x ~= self.xs[entityId] or
-    y ~= self.ys[entityId] or
-    angle ~= self.angles[entityId] then
-
-    self.xs[entityId] = x
-    self.ys[entityId] = y
-    self.angles[entityId] = angle
-    self:setDirty(entityId, true)
-  end
+  return self.transforms[entityId]
 end
 
 function TransformSystem:getWorldTransform(entityId, t)
-  if self.modes[entityId] ~= "world" then
-    self:setDirty(entityId, false)
-  end
-
-  if not t then
-    return self.worldXs[entityId],
-      self.worldYs[entityId],
-      self.worldAngles[entityId]
-  end
-
-  local mixedX =
-    heartMath.mix(self.previousWorldXs[entityId], self.worldXs[entityId], t)
-
-  local mixedY =
-    heartMath.mix(self.previousWorldYs[entityId], self.worldYs[entityId], t)
-
-  local mixedAngle =
-    heartMath.mixAngles(
-      self.previousWorldAngles[entityId], self.worldAngles[entityId], t)
-
-  return mixedX, mixedY, mixedAngle
-end
-
-function TransformSystem:setWorldTransform(entityId, x, y, angle)
-  self:setMode(entityId, "world")
-
-  if x ~= self.worldXs[entityId] or
-    y ~= self.worldYs[entityId] or
-    angle ~= self.worldAngles[entityId] then
-
-    self.worldXs[entityId] = x
-    self.worldYs[entityId] = y
-    self.worldAngles[entityId] = angle
-    self:setDirty(entityId, true)
-  end
+  self:setDirty(entityId, false)
+  return self.worldTransforms[entityId]
 end
 
 return TransformSystem

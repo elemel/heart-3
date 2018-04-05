@@ -17,8 +17,7 @@ function RevoluteJointComponentManager:init(physicsSystem)
 end
 
 function RevoluteJointComponentManager:createComponent(entityId, config)
-  local parentX, parentY, parentAngle =
-    self.transformSystem:getWorldTransform(entityId)
+  local transform = self.transformSystem:getWorldTransform(entityId)
 
   local bodyId2 =
     assert(config.body2 or self.game:findAncestorComponent(entityId, "body"))
@@ -34,11 +33,8 @@ function RevoluteJointComponentManager:createComponent(entityId, config)
   local anchorX2 = config.anchorX2 or 0
   local anchorY2 = config.anchorY2 or 0
 
-  anchorX1, anchorY1 =
-    heartMath.toWorldPoint2(anchorX1, anchorY1, parentX, parentY, parentAngle)
-
-  anchorX2, anchorY2 =
-    heartMath.toWorldPoint2(anchorX2, anchorY2, parentX, parentY, parentAngle)
+  anchorX1, anchorY1 = transform:transformPoint(anchorX1, anchorY1)
+  anchorX2, anchorY2 = transform:transformPoint(anchorX2, anchorY2)
 
   local collideConnected = config.collideConnected or false
   local referenceAngle = config.referenceAngle or 0

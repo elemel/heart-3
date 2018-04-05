@@ -1,4 +1,5 @@
 local CameraComponentManager = require("heart.graphics.CameraComponentManager")
+local heartMath = require("heart.math")
 local MeshLoader = require("heart.graphics.MeshLoader")
 local MeshComponentManager = require("heart.graphics.MeshComponentManager")
 
@@ -90,7 +91,8 @@ function GraphicsSystem:update(dt)
   local t = fixedUpdateSystem.accumulatedDt / fixedUpdateSystem.fixedDt
 
   for entityId, particleSystem in pairs(self.particleSystems) do
-    local x, y, angle = transformSystem:getWorldTransform(entityId, t)
+    local transform = transformSystem:getWorldTransform(entityId, t)
+    local x, y = transform:transformPoint(0, 0)
     particleSystem:setPosition(x, y)
     particleSystem:update(dt)
   end
@@ -105,8 +107,8 @@ function GraphicsSystem:draw()
   local viewportScale = math.sqrt(viewportWidth * viewportHeight)
 
   for cameraEntityId, cameraScale in pairs(self.cameraScales) do
-    local cameraX, cameraY, cameraAngle =
-      transformSystem:getWorldTransform(cameraEntityId, t)
+    local cameraTransform = transformSystem:getWorldTransform(cameraEntityId, t)
+    local cameraX, cameraY, cameraAngle = heartMath.decompose2(cameraTransform)
 
     cameraAngle = self.cameraAngles[cameraEntityId] or cameraAngle
     local scale = viewportScale * cameraScale
@@ -146,31 +148,9 @@ function GraphicsSystem:draw()
 
         love.graphics.setShader(nil)
 
-        for spriteEntityId, spriteImage in pairs(layer.spriteImages) do
-          local spriteX, spriteY, spriteAngle =
-            transformSystem:getWorldTransform(spriteEntityId, t)
-
-          local spriteScaleX = self.spriteScaleXs[spriteEntityId]
-          local spriteScaleY = self.spriteScaleYs[spriteEntityId]
-          spriteScaleX = spriteScaleX * self.texelScale
-          spriteScaleY = spriteScaleY * self.texelScale
-          local spriteWidth, spriteHeight = spriteImage:getDimensions()
-          local spriteAlignmentX = self.spriteAlignmentXs[spriteEntityId]
-          local spriteAlignmentY = self.spriteAlignmentYs[spriteEntityId]
-          spriteOriginX = spriteAlignmentX * spriteWidth
-          spriteOriginY = spriteAlignmentY * spriteHeight
-
-          love.graphics.draw(
-              spriteImage,
-              spriteX,
-              spriteY,
-              spriteAngle,
-              spriteScaleX,
-              spriteScaleY,
-              spriteOriginX,
-              spriteOriginY,
-              spriteShearX,
-              spriteShearY)
+        for spriteId, image in pairs(layer.spriteImages) do
+          local transform = transformSystem:getWorldTransform(spriteId, t)
+          love.graphics.draw(image, transform)
         end
 
         for entityId, particleSystem in pairs(layer.particleSystems) do

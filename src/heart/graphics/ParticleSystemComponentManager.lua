@@ -55,16 +55,18 @@ function ParticleSystemComponentManager:createComponent(entityId, config)
   local maxLinearDamping = config.maxLinearDamping or config.linearDamping or 0
   particleSystem:setLinearDamping(minLinearDamping, maxLinearDamping)
 
-  local areaSpreadDistribution = config.areaSpreadDistribution or "none"
+  if config.emissionArea then
+    local distribution = config.emissionArea.distribution or "none"
+    local dx = config.emissionArea.dx or 0
+    local dy = config.emissionArea.dy or 0
+    local angle = config.emissionArea.angle or 0
 
-  local areaSpreadDistanceX =
-      config.areaSpreadDistanceX or config.areaSpreadDistance or 0
+    local directionRelativeToCenter =
+      config.emissionArea.directionRelativeToCenter or false
 
-  local areaSpreadDistanceY =
-      config.areaSpreadDistanceY or config.areaSpreadDistance or 0
-
-  particleSystem:setAreaSpread(
-      areaSpreadDistribution, areaSpreadDistanceX, areaSpreadDistanceY)
+    particleSystem:setEmissionArea(
+      distribution, dx, dy, angle, directionRelativeToCenter)
+  end
 
   local minSpeed = config.minSpeed or config.speed or 0
   local maxSpeed = config.maxSpeed or config.speed or 0

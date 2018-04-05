@@ -104,7 +104,7 @@ return {
             },
 
             revoluteJoint = {
-              referenceAngle = math.pi,
+              referenceAngle = -math.pi,
             },
 
             flipper = {

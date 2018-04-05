@@ -21,11 +21,8 @@ function CircleFixtureComponentManager:createComponent(entityId, config)
   local body = assert(self.physicsSystem.bodies[bodyId])
   local x = config.x or 0
   local y = config.y or 0
-
-  local parentX, parentY, parentAngle =
-    self.transformSystem:getWorldTransform(entityId)
-
-  x, y = heartMath.toWorldPoint2(x, y, parentX, parentY, parentAngle)
+  local transform = self.transformSystem:getWorldTransform(entityId)
+  x, y = transform:transformPoint(x, y)
   x, y = body:getLocalPoint(x, y)
   local radius = config.radius or 0.5
   local shape = love.physics.newCircleShape(x, y, radius)
