@@ -1,4 +1,4 @@
-local heartMath = require("heart.math")
+local mathUtils = require("heart.math.utils")
 
 local TransformComponentManager = {}
 TransformComponentManager.__index = TransformComponentManager

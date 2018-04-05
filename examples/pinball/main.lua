@@ -22,8 +22,8 @@ function love.load()
       physics = assert(heart.physics.PhysicsSystem),
       physicsDebug = assert(heart.physics.PhysicsDebugSystem),
       script = assert(heart.script.ScriptSystem),
-      transform = assert(heart.transform.TransformSystem),
-      transformDebug = assert(heart.transform.TransformDebugSystem),
+      transform = assert(heart.math.TransformSystem),
+      transformDebug = assert(heart.math.TransformDebugSystem),
       update = assert(heart.update.UpdateSystem),
     },
   }

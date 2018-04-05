@@ -1,7 +1,7 @@
-local heartMath = require("heart.math")
+local mathUtils = require("heart.math.utils")
 
 local TransformComponentManager =
-  require("heart.transform.TransformComponentManager")
+  require("heart.math.TransformComponentManager")
 
 local utils = require("heart.utils")
 
