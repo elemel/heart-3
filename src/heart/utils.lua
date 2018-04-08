@@ -16,8 +16,8 @@ function utils.clear(t)
   end
 end
 
-function utils.keys(t)
-  local keys = {}
+function utils.keys(t, keys)
+  keys = keys or {}
 
   for k in pairs(t) do
     table.insert(keys, k)
@@ -26,8 +26,8 @@ function utils.keys(t)
   return keys
 end
 
-function utils.values(t)
-  local values = {}
+function utils.values(t, values)
+  values = values or {}
 
   for _, v in pairs(t) do
     table.insert(values, v)

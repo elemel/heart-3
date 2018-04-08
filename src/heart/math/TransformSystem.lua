@@ -17,119 +17,187 @@ end
 
 function TransformSystem:init(game)
   self.game = assert(game)
+  self.parameterLists = {}
+  self.previousParameterLists = {}
   self.transforms = {}
   self.worldTransforms = {}
-  self.dirty = {}
+  self.interpolatedWorldTransforms = {}
   self.parents = {}
-  self.children = {}
+  self.childSets = {}
+  self.parameterListPool = {}
+  self.transformPool = {}
+  self.t = 0
   self.game.componentManagers.transform = TransformComponentManager.new(self)
+  self.updateSystem = assert(self.game.systems.update)
+  self.updateSystem.topics.transform:subscribe(self, self.update)
   self.fixedUpdateSystem = assert(self.game.systems.fixedUpdate)
-  self.fixedUpdateSystem.topics.physics:subscribe(self, self.fixedUpdate)
+  self.fixedUpdateSystem.topics.transform:subscribe(self, self.fixedUpdate)
+end
+
+function TransformSystem:update(dt)
+  print("update", dt)
+  self:updateTime()
 end
 
 function TransformSystem:fixedUpdate(dt)
-end
+  print("fixedUpdate", dt)
+  self:updateTime()
 
-function TransformSystem:setMode(entityId, mode)
-  assert(mode == "local" or mode == "world")
-  local currentMode = assert(self.modes[entityId])
-
-  if mode ~= currentMode then
-    self:setDirty(entityId, false)
-    self.modes[entityId] = mode
+  for entityId, previousParameters in pairs(self.previousParameterLists) do
+    self.previousParameterLists[entityId] = nil
+    table.insert(self.parameterListPool, previousParameters)
   end
 end
 
+function TransformSystem:updateTime()
+  self.t = self.fixedUpdateSystem.accumulatedDt / self.fixedUpdateSystem.fixedDt
+
+  for entityId, transform in pairs(self.interpolatedWorldTransforms) do
+    self.interpolatedWorldTransforms[entityId] = nil
+    table.insert(self.transformPool, transform)
+  end
+end
+
+-- TODO: World mode
 function TransformSystem:setParent(entityId, parentId, mode)
   mode = mode or "local"
   assert(mode == "local" or mode == "world")
   local currentParentId = self.parents[entityId]
 
   if parentId ~= currentParentId then
-    if mode == "world" then
-      self:setDirty(entityId, false)
-    end
-
     if currentParentId then
-      local siblings = self.children[currentParentId]
+      local siblings = self.childSets[currentParentId]
       siblings[entityId] = nil
 
       if not next(siblings) then
-        self.children[currentParentId] = nil
+        self.childSets[currentParentId] = nil
       end
     end
 
     self.parents[entityId] = parentId
 
     if parentId then
-      local siblings = self.children[parentId]
+      local siblings = self.childSets[parentId]
 
       if not siblings then
         siblings = {}
-        self.children[parentId] = siblings
+        self.childSets[parentId] = siblings
       end
 
       siblings[entityId] = true
     end
 
-    if mode == "world" then
-      local transform = self.transforms[entityId]
-      local worldTransform = self.worldTransforms[entityId]
-      transform:reset()
-
-      if parentId then
-        self:setDirty(parentId, false)
-        local parentWorldTransform = self.worldTransforms[parentId]
-        transform:apply(parentWorldTransform:inverse())
-      end
-
-      transform:apply(worldTransform)
-    end
-
-    self:setDirty(entityId, true)
+    self:clearDescendantWorldTransforms(entityId)
   end
 end
 
-function TransformSystem:setDirty(entityId, dirty)
-  assert(type(dirty) == "boolean")
-  local currentDirty = self.dirty[entityId] or false
-
-  if dirty ~= currentDirty then
-    if dirty then
-      local children = self.children[entityId]
-
-      if children then
-        for childId in pairs(children) do
-          self:setDirty(childId, true)
-        end
-      end
-
-      self.dirty[entityId] = true
-    else
-      local transform = self.transforms[entityId]
-      local worldTransform = self.worldTransforms[entityId]
-      worldTransform:reset()
-      local parentId = self.parents[entityId]
-
-      if parentId then
-        self:setDirty(parentId, false)
-        local parentWorldTransform = self.worldTransforms[parentId]
-        worldTransform:apply(parentWorldTransform)
-      end
-
-      worldTransform:apply(transform)
-      self.dirty[entityId] = nil
-    end
-  end
+function TransformSystem:getParameters(entityId)
+  return unpack(self.parameterLists[entityId])
 end
 
-function TransformSystem:getTransform(entityId, t)
+function TransformSystem:setParameters(
+  entityId, x, y, angle, scaleX, scaleY, originX, originY, skewX, skewY)
+
+  local parameters = self.parameterLists[entityId]
+
+  if not self.previousParameterLists[entityId] then
+    self.previousParameterLists[entityId] = parameters
+    parameters = self:allocateParameters()
+    self.parameterLists[entityId] = parameters
+  end
+
+  parameters[1] = x or 0
+  parameters[2] = y or 0
+  parameters[3] = angle or 0
+  parameters[4] = scaleX or 1
+  parameters[5] = scaleY or 1
+  parameters[6] = originX or 0
+  parameters[7] = originY or 0
+  parameters[8] = skewX or 0
+  parameters[9] = skewY or 0
+
+  local transform = self.transforms[entityId]
+
+  transform:setTransformation(
+    x, y, angle, scaleX, scaleY, originX, originY, skewX, skewY)
+
+  self:clearDescendantWorldTransforms(entityId)
+end
+
+function TransformSystem:getTransform(entityId)
   return self.transforms[entityId]
 end
 
-function TransformSystem:getWorldTransform(entityId, t)
-  self:setDirty(entityId, false)
-  return self.worldTransforms[entityId]
+function TransformSystem:getWorldTransform(entityId)
+  local worldTransform = self.worldTransforms[entityId]
+
+  if not worldTransform then
+    worldTransform = self:allocateTransform()
+    self.worldTransforms[entityId] = worldTransform
+    worldTransform:reset()
+    local parentId = self.parents[entityId]
+
+    if parentId then
+      worldTransform:apply(self:getWorldTransform(parentId))
+    end
+
+    worldTransform:apply(self.transforms[entityId])
+  end
+
+  return worldTransform
+end
+
+function TransformSystem:getInterpolatedWorldTransform(entityId)
+  local worldTransform = self.worldTransforms[entityId]
+
+  if not worldTransform then
+    worldTransform = self:allocateTransform()
+    self.interpolatedWorldTransform[entityId] = worldTransform
+
+    local parentId = self.parents[entityId]
+
+    if parentId then
+      worldTransform:apply(self:getInterpolatedWorldTransform(parentId))
+    end
+
+    -- TODO: Interpolate
+    worldTransform:apply(self.transforms[entityId])
+  end
+
+  return worldTransform
+end
+
+function TransformSystem:allocateParameters()
+  if #self.parameterListPool == 0 then
+    return {0, 0, 0, 1, 1, 0, 0, 0, 0}
+  end
+
+  return table.remove(self.parameterListPool)
+end
+
+function TransformSystem:allocateTransform()
+  if #self.transformPool == 0 then
+    return love.math.newTransform()
+  end
+
+  return table.remove(self.transformPool)
+end
+
+function TransformSystem:clearDescendantWorldTransforms(entityId)
+  local worldTransform = self.worldTransforms[entityId]
+
+  if worldTransform then
+    self.worldTransforms[entityId] = nil
+    table.insert(self.transformPool, worldTransform)
+
+    local children = self.childSets[entityId]
+
+    if children then
+      for childId in pairs(children) do
+        self:clearDescendantWorldTransforms(childId)
+      end
+    end
+  end
 end
 
 return TransformSystem

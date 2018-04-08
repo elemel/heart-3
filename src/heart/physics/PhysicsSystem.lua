@@ -126,8 +126,7 @@ function PhysicsSystem:updatePhysics(dt)
     local x, y = body:getPosition()
     local angle = body:getAngle()
     transformSystem:setParent(entityId, nil)
-    transformSystem:getTransform(entityId):reset():translate(x, y):rotate(angle)
-    transformSystem:setDirty(entityId, true)
+    transformSystem:setParameters(entityId, x, y, angle)
   end
 
   self.topics.animation:publish(dt)

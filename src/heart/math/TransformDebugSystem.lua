@@ -21,8 +21,12 @@ function TransformDebugSystem:draw()
   love.graphics.setColor(self.color)
 
   for entityId, parentId in pairs(self.transformSystem.parents) do
-    local x1, y1, _ = self.transformSystem:getWorldTransform(parentId)
-    local x2, y2, _ = self.transformSystem:getWorldTransform(entityId)
+    local x1, y1 =
+      self.transformSystem:getWorldTransform(parentId):transformPoint(0, 0)
+
+    local x2, y2 =
+      self.transformSystem:getWorldTransform(entityId):transformPoint(0, 0)
+
     love.graphics.line(x1, y1, x2, y2)
   end
 

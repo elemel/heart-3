@@ -29,7 +29,7 @@ return {
     },
 
     transform = {},
-    -- transformDebug = {},
+    transformDebug = {},
 
     physics = {
       gravityX = 0,
@@ -44,8 +44,8 @@ return {
 
     update = {
       topics = {
+        "transform",
         "fixedUpdate",
-        "physics",
         "graphics",
       },
     },
